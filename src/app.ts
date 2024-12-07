@@ -3,7 +3,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-// import postRoutes from './src/routes/index'
 
 const app = express();
 import { config } from 'dotenv';

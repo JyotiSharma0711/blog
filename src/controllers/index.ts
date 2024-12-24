@@ -21,7 +21,7 @@ const blogController = {
 
     getBlogs: async (req: Request, res: Response) => {
         try {
-            // Logic to fetch blogs from the database
+
             return res.status(200).json({
                 success: true,
                 message: 'Blogs fetched successfully',

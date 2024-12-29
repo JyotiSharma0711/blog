@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import blogRoutes from './routes/blogRoutes';
+import userRoutes from './routes/userRoutes'
 import { config } from 'dotenv';
 import { connectDB } from './config/db';
 
@@ -16,6 +17,7 @@ app.use(bodyParser.json());
 connectDB();
 
 app.use('/', blogRoutes);
+app.use('/', userRoutes);
 app.get('/', (req, res) => {
     res.send('Hello, Amit here!');
 });

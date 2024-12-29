@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid()) @db.Uuid
+  name          String
+  email         String    @unique
+  password      String
+  profileImage  String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  blogs         Blog[]
+  comments      Comment[]
+  likes         Like[]
+}
+
+model Blog {
+  id        String     @id @default(uuid()) @db.Uuid
+  title     String
+  content   String
+  status    BlogStatus @default(DRAFT)
+  authorId  String     @db.Uuid
+  author    User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  comments  Comment[]
+  tags      BlogTag[]
+  likes     Like[]
+}
+
+model Comment {
+  id        String   @id @default(uuid()) @db.Uuid
+  content   String
+  blogId    String   @db.Uuid
+  userId    String   @db.Uuid
+  blog      Blog     @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+model Tag {
+  id       String    @id @default(uuid()) @db.Uuid
+  name     String    @unique
+  blogs    BlogTag[]
+}
+
+model BlogTag {
+  id      String @id @default(uuid()) @db.Uuid
+  blogId  String @db.Uuid
+  tagId   String @db.Uuid
+  blog    Blog   @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  tag     Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([blogId, tagId])
+}
+
+model Like {
+  id        String   @id @default(uuid()) @db.Uuid
+  blogId    String   @db.Uuid
+  userId    String   @db.Uuid
+  blog      Blog     @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([blogId, userId])
+}
+
+enum BlogStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}

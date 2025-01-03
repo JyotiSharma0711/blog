@@ -6,7 +6,7 @@ import userRoutes from './routes/userRoutes'
 import tagRoutes from './routes/tags';
 import blogTagRoutes from './routes/blogTags';
 import likeRoutes from './routes/likes';
-import commentRoutes from '../src/routes/comments'
+import commentRoutes from './routes/comments'
 import { config } from 'dotenv';
 import { connectDB } from './config/db';
 
@@ -18,6 +18,7 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 connectDB();
 
